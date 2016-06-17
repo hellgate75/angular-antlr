@@ -58,6 +58,10 @@ we provide an antlr4 unlinking command to reverse the previous operation :
 
 (NOTE: This profile uninstalls the antlr4 mandatory bowel dependency before build.)
 
+ `mvn -U exec:exec -P compile-project-parsers`
+
+ (NOTE: This profile clean and create ANTLR, JISON and EBNF project JavaScript parsers.)
+
 ## Testing
 
 Running `grunt test` will run the unit tests with karma. Test cases are running before the build as pre-requisites.

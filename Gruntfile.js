@@ -176,6 +176,15 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      app: {
+        files: [{
+          dot: true,
+          src: [
+            'app/ebnf/{,*/}*',
+            'app/antlr/{,*/}*'
+          ]
+        }]
+      },
       server: '.tmp'
     },
 
@@ -586,7 +595,7 @@ module.exports = function (grunt) {
   //   }
   // });
 
-  grunt.registerTask('ebnfier', ['jison-processor:ebnf']);
+  grunt.registerTask('ebnfier', ['jison-processor:json']);
 
   grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
@@ -602,6 +611,14 @@ module.exports = function (grunt) {
     'postcss',
     'connect:test',
     'karma'
+  ]);
+
+  grunt.registerTask('build-parser', [
+    'clean:app',
+    'antlr4:lexer',
+    'replace:antl4syntax',
+    'antlr4:parser',
+    'jison-processor:jison'
   ]);
   grunt.registerTask('antl4dist', [
     'antlr4:lexer',

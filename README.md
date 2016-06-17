@@ -41,12 +41,12 @@ build:
 install NODE and NPM:
 `mvn clean install -P install-platform`
 
-(NOTE: In the build/bin directory will be installed the executables.)
+(NOTE: In the build/bin directory will be installed the executables, then compiles the EBNF, JISON and ANTRL files.)
 
 run NPM and bower install of dependency packages:
 `mvn clean install -P pre-build`
 
-(NOTE: This profile installs all the dependencies for NPM and bower configuration files.)
+(NOTE: This profile installs all the dependencies for NPM and bower configuration files, then compiles the EBNF, JISON and ANTRL files.)
 
 run once the antlr4 linking command after the npm/bower install phase :
 `mvn clean install -P link-antlr4`

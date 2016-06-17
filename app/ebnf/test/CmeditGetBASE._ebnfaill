@@ -1,0 +1,56 @@
+"cmedit" "get" GET_BY_FDN | GET_BY_QUERY
+
+GET_BY_FDN ::= <fdn> { ";" <fdn> } [OUTPUT_SPECIFICATIONS] [CONFIGURATION]
+
+GET_BY_QUERY ::= SCOPE { ";" SCOPE }  FILTER [OUTPUT_SPECIFICATIONS] [NAMESPACE] [VERSION] [NETYPE] [CONFIGURATION] [OUTPUT-FORMAT]
+
+SCOPE ::= <fdn>
+          | <node-name>
+          | "*"
+          | ["*"] <partial-node-name> ["*"]
+
+FILTER ::= CLASS_FILTER { "," CHILD_CLASS_FILTER }
+ 
+CLASS_FILTER ::= <mo-class-type>
+                 | <mo-class-type> "." ALL_ATTRIBUTES
+                 | <mo-class-type> "." PERSISTED_ATTRIBUTES
+                 | <mo-class-type> "." PM_COUNTERS
+                 | <mo-class-type> "." CM_ATTRIBUTES
+                 | <mo-class-type> "." "(" ATTRIBUTE_FILTER { "," ATTRIBUTE_FILTER } ")"
+
+CHILD_CLASS_FILTER ::= "*"
+                       | CLASS_FILTER
+		       | CLASS_FILTER { "," CLASS_FILTER }
+		       | "(" CLASS_FILTER { ";" CLASS_FILTER } ")"
+
+ATTRIBUTE_FILTER ::= <attribute-name>
+                     | <attribute-name> "==" <value>
+                     | <attribute-name> "==" ["*"] <string-value> ["*"]
+                     | <attribute-name> COMPARISON_OPERATOR <numeric-value>
+  
+COMPARISON_OPERATOR ::= "<" | "<=" | ">" | ">="
+ 
+OUTPUT_SPECIFICATIONS ::= OUTPUT_SPECIFICATION { ";" OUTPUT_SPECIFICATION }
+ 
+OUTPUT_SPECIFICATION ::= <mo-class-type>
+                         | <mo-class-type> "." ALL_ATTRIBUTES
+                         | <mo-class-type> "." PERSISTED_ATTRIBUTES
+                         | <mo-class-type> "." PM_COUNTERS
+                         | <mo-class-type> "." CM_ATTRIBUTES
+                         | <mo-class-type> "." <attribute-name>
+                         | <mo-class-type> "." "(" <attribute-name> { "," <attribute-name> } ")"
+
+ALL_ATTRIBUTES ::= "*"
+PERSISTED_ATTRIBUTES ::= "<p>"
+PM_COUNTERS ::= "<pm>"
+CM_ATTRIBUTES ::= "<cm>"
+						  
+NAMESPACE ::= ( "-ns" | "--namespace" ) "=" <namespace-name>
+
+VERSION ::= ( "-v" | "--version" ) "=" <digit> { "." <digit> }
+ 
+NETYPE ::= ( "-ne" | "--netype" ) "=" <netype-name>
+
+CONFIGURATION ::= ( "-c" | "--config" ) "=" <configuration-name>
+
+OUTPUT-FORMAT ::= ( "-l" | "-t" )

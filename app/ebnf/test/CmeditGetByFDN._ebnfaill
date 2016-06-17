@@ -1,0 +1,77 @@
+CMEDIT_GET ::= "cmedit" "get" GET_BY
+
+GET_BY ::= GET_BY_FDN | GET_BY_QUERY
+
+
+GET_BY_FDN ::= FDN { ";" FDN } [OUTPUT_SPECIFICATIONS] [CONFIGURATION]
+
+GET_BY_QUERY ::= SCOPE { ";" SCOPE }  FILTER [OUTPUT_SPECIFICATIONS] [NAMESPACE] [VERSION] [NETYPE] [CONFIGURATION] [OUTPUT-FORMAT]
+
+
+FDN ::= <mo-class-type> "=" <identity> { "," <mo-class-type> "=" <identity> }
+
+<mo-class-type> ::= /^[A-z0-9]+$/
+<identity> ::= /^[A-z0-9]+$/
+<configuration-name> ::= /^[A-z0-9]+$/
+<attribute-name> ::= /^[A-z0-9]+$/
+<node-name> ::= /^[A-z0-9]+$/
+<partial-node-name> ::= /^[A-z0-9]+$/
+<value> ::= /^"[A-z0-9]+"$/
+<string-value> ::= /^[A-z0-9]+$/
+<numeric-value> ::= /^[0-9]+$/
+<namespace-name> ::= /^[A-z0-9]+$/
+<digit> ::= /^[0-9]+$/
+<netype-name> ::= /^[A-z0-9]+$/
+
+SCOPE ::= FDN 
+          | <node-name>
+          | "*"
+          | ["*"] <partial-node-name> ["*"]
+
+FILTER ::= CLASS_FILTER { "," CHILD_CLASS_FILTER }
+ 
+CLASS_FILTER ::= <mo-class-type>
+                 | <mo-class-type> "." ALL_ATTRIBUTES
+                 | <mo-class-type> "." PERSISTED_ATTRIBUTES
+                 | <mo-class-type> "." PM_COUNTERS
+                 | <mo-class-type> "." CM_ATTRIBUTES
+                 | <mo-class-type> "." ATTRIBUTE_FILTER
+                 | <mo-class-type> "." "(" ATTRIBUTE_FILTER { "," ATTRIBUTE_FILTER } ")"
+
+CHILD_CLASS_FILTER ::= "*"
+                       | CLASS_FILTER
+		       | CLASS_FILTER { "," CLASS_FILTER }
+		       | "(" CLASS_FILTER { ";" CLASS_FILTER } ")"
+
+ATTRIBUTE_FILTER ::= <attribute-name>
+                     | <attribute-name> "=" "=" <value>
+                     | <attribute-name> "=" "=" ["*"] <string-value> ["*"]
+                     | <attribute-name> COMPARISON_OPERATOR <numeric-value>
+  
+COMPARISON_OPERATOR ::= "<" | "<" "=" | ">" | ">" "="
+ 
+OUTPUT_SPECIFICATIONS ::= OUTPUT_SPECIFICATION { ";" OUTPUT_SPECIFICATION }
+ 
+OUTPUT_SPECIFICATION ::= <mo-class-type>
+                         | <mo-class-type> "." ALL_ATTRIBUTES
+                         | <mo-class-type> "." PERSISTED_ATTRIBUTES
+                         | <mo-class-type> "." PM_COUNTERS
+                         | <mo-class-type> "." CM_ATTRIBUTES
+                         | <mo-class-type> "." <attribute-name>
+                         | <mo-class-type> "." "(" <attribute-name> { "," <attribute-name> } ")"
+
+ALL_ATTRIBUTES ::= "*"
+PERSISTED_ATTRIBUTES ::= "<" "p" ">"
+PM_COUNTERS ::= "<" "pm" ">"
+CM_ATTRIBUTES ::= "<" "cm" ">"
+						  
+NAMESPACE ::= ( "-ns" | "--namespace" ) "=" <namespace-name>
+
+VERSION ::= ( "-v" | "--version" ) "=" <digit> { "." <digit> }
+ 
+NETYPE ::= ( "-ne" | "--netype" ) "=" <netype-name>
+
+CONFIGURATION ::= ( "-c" | "--config" ) "=" <configuration-name>
+
+OUTPUT-FORMAT ::= ( "-l" | "-t" )
+

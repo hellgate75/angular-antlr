@@ -1,0 +1,217 @@
+CMEDIT ::= "cmedit" SUBSIDIARY_CMEDIT_SUB_COMMAND
+
+SUBSIDIARY_CMEDIT_SUB_COMMAND ::= SUBSIDIARY_CMEDIT_GET | SUBSIDIARY_CMEDIT_QUERY | SUBSIDIARY_CMEDIT_ACTION | SUBSIDIARY_CMEDIT_SET | SUBSIDIARY_CMEDIT_CREATE | SUBSIDIARY_CMEDIT_DELETE
+
+
+<mo-class-type> ::= /^[A-z0-9]+$/
+<identity> ::= /^[A-z0-9]+$/
+<configuration-name> ::= /^[A-z0-9]+$/
+<attribute-name> ::= /^[A-z0-9]+$/
+<action-name> ::= /^[A-z0-9]+$/
+<attribute-value> ::= /^[A-z0-9]+$/
+<node-name> ::= /^\\*?[A-z0-9]+\\*?$/
+<partial-node-name> ::= /^[A-z0-9]+$/
+<value> ::= /^"[A-z0-9]+"$/
+<string-value> ::= /^[A-z0-9]+$/
+<numeric-value> ::= /^[0-9]+$/
+<namespace-name> ::= /^[A-z0-9]+$/
+<digit> ::= /^[0-9]+$/
+<netype-name> ::= /^[A-z0-9]+$/
+
+<action-parameter-name> ::= /^[A-z0-9]+$/
+<action-parameter-value> ::= /^[A-z0-9]+$/
+
+
+SUBSIDIARY_CMEDIT_DELETE ::= "delete" SUBSIDIARY_DELETE_BY
+
+SUBSIDIARY_DELETE_BY ::= SUBSIDIARY_DELETE_BY_FDN | SUBSIDIARY_DELETE_BY_QUERY 
+
+SUBSIDIARY_DELETE_BY_FDN ::= FDN { ";" FDN } ["-ALL"] [CONFIGURATION] [OUTPUT-FORMAT]
+
+SUBSIDIARY_DELETE_BY_QUERY ::= SCOPE D_CLASS_FILTERS ["-ALL"] [NAMESPACE VERSION] [CONFIGURATION] [OUTPUT-FORMAT]
+ 
+
+D_CLASS_FILTERS ::=  D_CLASS_FILTER 
+                | D_CLASS_FILTER { "," D_CLASS_FILTER } DELETE_TYPE 
+
+D_CLASS_FILTER ::= <mo-class-type>
+                 | <mo-class-type> "." D_ATTRIBUTE_FILTER
+                 | <mo-class-type> "." "(" D_ATTRIBUTE_FILTER { "," D_ATTRIBUTE_FILTER } ")"
+
+DELETE_TYPE ::= <mo-class-type>
+ 
+D_ATTRIBUTE_FILTER ::= <attribute-name> D_COMPARISON_OPERATOR <attribute-value>
+
+D_COMPARISON_OPERATOR ::= "=" "=" | "<" | "<" "=" | ">" | ">" "="
+
+
+
+
+
+
+
+SUBSIDIARY_CMEDIT_CREATE ::= "create" FDN [ C_ATTRIBUTE_SETTER_LIST ] [ NAMESPACE VERSION ] [CONFIGURATION] [OUTPUT-FORMAT]
+
+
+C_ATTRIBUTE_SETTER_LIST ::= C_ATTRIBUTE_SETTER { ";" | "," C_ATTRIBUTE_SETTER }
+
+C_ATTRIBUTE_SETTER ::= <attribute-name> "=" <attribute-value>
+                     | <attribute-name> "=" "(" "#C_ATTRIBUTE_SETTER_LIST#" ")"
+                     | <attribute-name> "=" C_ATTRIBUTE_ARRAY
+
+C_ATTRIBUTE_ARRAY ::= "[" <attribute-value> { "," <attribute-value> } "]"
+                    | "[" "(" "#C_ATTRIBUTE_SETTER_LIST#" ")" { "," "(" "C_ATTRIBUTE_SETTER_LIST" ")" } "]"
+
+
+
+
+
+SUBSIDIARY_CMEDIT_SET ::= "set" SUBSIDIARY_SET_BY
+
+SUBSIDIARY_SET_BY ::= SUBSIDIARY_SET_BY_FDN | SUBSIDIARY_SET_BY_QUERY [OUTPUT-FORMAT]
+
+SUBSIDIARY_SET_BY_FDN ::= FDN { ";" FDN } ATTRIBUTE_SETTER_LIST [CONFIGURATION]
+
+SUBSIDIARY_SET_BY_QUERY ::= SCOPE { ";" SCOPE } S_CLASS_FILTER { "," S_CLASS_FILTER } ATTRIBUTE_SETTER_LIST [NAMESPACE] [VERSION] [NETYPE] [CONFIGURATION]
+
+
+S_CLASS_FILTER ::= <mo-class-type>
+                  | <mo-class-type> "." S_ATTRIBUTE_FILTER
+                  | <mo-class-type> "." "(" S_ATTRIBUTE_FILTER { "," S_ATTRIBUTE_FILTER } ")"
+
+S_ATTRIBUTE_FILTER ::= <attribute-name> S_COMPARISON_OPERATOR <value>
+
+S_COMPARISON_OPERATOR ::= "=" "=" | "<" | "<" "=" | ">" | ">" "="
+
+ATTRIBUTE_SETTER_LIST ::= S_ATTRIBUTE_SETTER { ";" | "," S_ATTRIBUTE_SETTER }
+ 
+S_ATTRIBUTE_SETTER ::= [<mo-class-type> "."] <attribute-name> "=" <attribute-value>
+         | [<mo-class-type> "."] <attribute-name> "=" "(" "#ATTRIBUTE_SETTER_LIST#" ")"
+         | [<mo-class-type> "."] <attribute-name> "=" ATTRIBUTE_ARRAY
+
+
+ATTRIBUTE_ARRAY ::= "[" <attribute-value> { "," <attribute-value> } "]"
+                    | "[" "(" "#ATTRIBUTE_SETTER_LIST#" ")" { "," "(" "#ATTRIBUTE_SETTER_LIST#" ")" } "]"
+
+
+
+
+
+SUBSIDIARY_CMEDIT_ACTION ::= "action" SUBSIDIARY_ACTION_BY
+
+SUBSIDIARY_ACTION_BY ::= SUBSIDIARY_ACTION_BY_FDN | SUBSIDIARY_ACTION_BY_QUERY
+
+SUBSIDIARY_ACTION_BY_FDN ::= FDN { ";" FDN } ACTION_SPECIFICATION [OUTPUT-FORMAT]
+
+SUBSIDIARY_ACTION_BY_QUERY ::=  SCOPE { ";" SCOPE } A_FILTER ACTION_SPECIFICATION [NAMESPACE] [VERSION] [NETYPE] [OUTPUT-FORMAT]
+
+
+A_FILTER ::= <mo-class-type>
+           |  <mo-class-type> "." A_ATTRIBUTE_FILTER 
+           |  <mo-class-type> "." "(" A_ATTRIBUTE_FILTER { "," A_ATTRIBUTE_FILTER } ")" 
+
+A_ATTRIBUTE_FILTER ::=  <attribute-name> A_COMPARISON_OPERATOR <attribute-value>
+
+A_COMPARISON_OPERATOR ::= "=" "=" | "<" | "<" "=" | ">" | ">" "="
+
+ACTION_SPECIFICATION ::= <action-name>
+						| <action-name> "." ACTION_PARAM_LIST
+
+ACTION_PARAM_LIST ::= ACTION_PARAM | SUBSIDIARY_ACTION_PARAMS
+
+SUBSIDIARY_ACTION_PARAMS ::= "(" ACTION_PARAM { "," ACTION_PARAM } ")"
+
+
+ACTION_PARAM ::= <action-parameter-name> "=" <action-parameter-value>
+
+
+ATTRIBUTE_LIST ::= A_ATTRIBUTE_SETTER { "," A_ATTRIBUTE_SETTER }
+
+A_ATTRIBUTE_SETTER ::= <attribute-name> "=" <attribute-value> 
+                     |  <attribute-name> "=" "." "(" "#ATTRIBUTE_LIST#" ")" 
+
+
+
+
+           
+
+
+
+
+
+
+SUBSIDIARY_CMEDIT_GET ::= "get" SUBSIDIARY_GET_BY_FDN
+
+SUBSIDIARY_GET_BY_FDN ::= FDN { ";" FDN } SUBSIDIARY_OPTIONS_GET_BY_FDN
+
+SUBSIDIARY_OPTIONS_GET_BY_FDN ::= [OUTPUT_SPECIFICATIONS] [CONFIGURATION]
+
+
+
+
+SUBSIDIARY_CMEDIT_QUERY ::= "query" SUBSIDIARY_GET_BY_QUERY
+
+SUBSIDIARY_GET_BY_QUERY ::= SCOPE FILTER SUBSIDIARY_OPTIONS_GET_BY_QUERY
+
+SUBSIDIARY_OPTIONS_GET_BY_QUERY ::= [OUTPUT_SPECIFICATIONS] [NAMESPACE] [VERSION] [NETYPE] [CONFIGURATION] [OUTPUT-FORMAT]
+
+
+
+FDN ::= <mo-class-type> "=" <identity> { "," <mo-class-type> "=" <identity> }
+
+SUBSIDIARY_FDN ::= <mo-class-type> "=" <identity> { "," <mo-class-type> "=" <identity> }
+
+SCOPE ::= ( SUBSIDIARY_SCOPE { ";" SUBSIDIARY_SCOPE } ) | SUBSIDIARY_SCOPE_WILDCARD
+
+SUBSIDIARY_SCOPE_WILDCARD ::= "*"
+
+SUBSIDIARY_SCOPE ::= <node-name>        
+          
+
+FILTER ::= SUBSIDIARY_CLASS_FILTER { "," CHILD_CLASS_FILTER }
+ 
+SUBSIDIARY_CLASS_FILTER ::= <mo-class-type>
+                 | <mo-class-type> "." SUBSIDIARY_ALL_ATTRIBUTES
+                 | <mo-class-type> "." SUBSIDIARY_PERSISTED_ATTRIBUTES
+                 | <mo-class-type> "." SUBSIDIARY_PM_COUNTERS
+                 | <mo-class-type> "." SUBSIDIARY_CM_ATTRIBUTES
+                 | <mo-class-type> "." ATTRIBUTE_FILTER
+                 | <mo-class-type> "." "(" ATTRIBUTE_FILTER { "," ATTRIBUTE_FILTER } ")"
+
+CHILD_CLASS_FILTER ::= "*"
+                       | SUBSIDIARY_CLASS_FILTER
+		       | SUBSIDIARY_CLASS_FILTER { "," SUBSIDIARY_CLASS_FILTER }
+		       | "(" SUBSIDIARY_CLASS_FILTER { ";" SUBSIDIARY_CLASS_FILTER } ")"
+
+ATTRIBUTE_FILTER ::= <attribute-name>
+                     | <attribute-name> "=" "=" <value>
+                     | <attribute-name> "=" "=" ["*"] <string-value> ["*"]
+                     | <attribute-name> SUBSIDIARY_COMPARISON_OPERATOR <numeric-value>
+  
+SUBSIDIARY_COMPARISON_OPERATOR ::= "<" | "<" "=" | ">" | ">" "="
+ 
+OUTPUT_SPECIFICATIONS ::= SUBSIDIARY_OUTPUT_SPECIFICATION { ";" SUBSIDIARY_OUTPUT_SPECIFICATION }
+ 
+SUBSIDIARY_OUTPUT_SPECIFICATION ::= <mo-class-type>
+                         | <mo-class-type> "." SUBSIDIARY_ALL_ATTRIBUTES
+                         | <mo-class-type> "." SUBSIDIARY_PERSISTED_ATTRIBUTES
+                         | <mo-class-type> "." SUBSIDIARY_PM_COUNTERS
+                         | <mo-class-type> "." SUBSIDIARY_CM_ATTRIBUTES
+                         | <mo-class-type> "." <attribute-name>
+                         | <mo-class-type> "." "(" <attribute-name> { "," <attribute-name> } ")"
+
+SUBSIDIARY_ALL_ATTRIBUTES ::= "*"
+SUBSIDIARY_PERSISTED_ATTRIBUTES ::= "<" "p" ">"
+SUBSIDIARY_PM_COUNTERS ::= "<" "pm" ">"
+SUBSIDIARY_CM_ATTRIBUTES ::= "<" "cm" ">"
+						  
+NAMESPACE ::= ( "-ns" | "--namespace" ) "=" <namespace-name>
+
+VERSION ::= ( "-v" | "--version" ) "=" <digit> { "." <digit> }
+ 
+NETYPE ::= ( "-ne" | "--netype" ) "=" <netype-name>
+
+CONFIGURATION ::= ( "--config" | "-c" ) "=" <configuration-name>
+
+OUTPUT-FORMAT ::= ( "-t" | "-l" )
+

@@ -1,0 +1,45 @@
+
+{
+  "name": "angular-antlr",
+  "version": "0.0.0",
+  "homepage": "https://github.com/hellgate75/angular-antlr",
+  "authors": [
+    "Fabrizio Torelli <hellgate75@gmail.com>"
+  ],
+  "description": "AngularJS based Antlr 4 Lexical and Parser Grammar service that expose an autocomplete services.",
+  "keywords": [
+    "AngularJS",
+    "Antrl4"
+  ],
+  "dependencies": {
+    "requirejs": "^2.2.0",
+    "angular": "^1.4.0",
+    "bootstrap-sass-official": "^3.2.0",
+    "angular-animate": "^1.4.0",
+    "angular-aria": "^1.4.0",
+    "angular-cookies": "^1.4.0",
+    "angular-messages": "^1.4.0",
+    "angular-resource": "^1.4.0",
+    "angular-route": "^1.4.0",
+    "angular-sanitize": "^1.4.0",
+    "angular-touch": "^1.4.0",
+    "angular-bootstrap": "angular-ui-bootstrap-bower#^1.3.3",
+    "angular-fontawesome": "^1.0.0",
+    "modal": "^1.1.9",
+    "async": "^1.5.2"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.0"
+  },
+  "appPath": "app",
+  "moduleName": "angularAntlrApp",
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  }
+}

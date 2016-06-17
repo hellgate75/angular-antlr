@@ -170,7 +170,9 @@ module.exports = function (grunt) {
           src: [
             '.tmp',
             '<%= antrConfig.dist %>/{,*/}*',
-            '!<%= antrConfig.dist %>/.git{,*/}*'
+            '!<%= antrConfig.dist %>/.git{,*/}*',
+            'app/ebnf/{,*/}*',
+            'app/antlr/{,*/}*'
           ]
         }]
       },
@@ -421,7 +423,8 @@ module.exports = function (grunt) {
             '*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*',
-            'antlr/{,*/}*.*'
+            'antlr/{,*/}*.*',
+            'ebnf/{,*/}*.*'
           ]
         },
          {
@@ -526,11 +529,11 @@ module.exports = function (grunt) {
             options: {
                 output: 'app/ebnf/calculator.js',
                 //grammar: 'app/ebnf/test-parser.json'
-                grammar: 'app/ebnf/calculator.jison'
+                grammar: 'app/ebnf-src/calculator.jison'
                 // grammar: require('./test/calculator.js')
             },
             files: {
-                'app/ebnf': 'app/ebnf/*.jison'
+                'app/ebnf': 'app/ebnf-src/*.jison'
             }
         },
         // ebnf: {
